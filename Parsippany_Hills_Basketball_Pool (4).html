@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsippany Hills Basketball - Thanksgiving Pool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #003594 0%, #041e42 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .header h1 {
+            color: #003594;
+            font-size: 32px;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+            margin: 3px 0;
+        }
+        
+        .header .highlight {
+            color: #d32f2f;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            padding: 12px 20px;
+            background: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #003594;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .tab-button.active {
+            background: #003594;
+            color: white;
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #1a472a;
+            box-shadow: 0 0 5px rgba(26, 71, 42, 0.3);
+        }
+        
+        .square-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            gap: 8px;
+            margin-bottom: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        
+        .square-btn {
+            padding: 10px;
+            border: 2px solid #ddd;
+            background: white;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        
+        .square-btn:hover:not(.sold) {
+            border-color: #1a472a;
+            background: #f0f0f0;
+        }
+        
+        .square-btn.selected {
+            background: #1a472a;
+            color: white;
+            border-color: #1a472a;
+        }
+        
+        .square-btn.sold {
+            background: #ccc;
+            color: #999;
+            cursor: not-allowed;
+            border-color: #999;
+        }
+        
+        .selected-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #003594;
+        }
+        
+        .selected-info p {
+            color: #003594;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .price-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #003594;
+        }
+        
+        .price-box p {
+            color: #333;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        
+        .price-box .total {
+            font-size: 18px;
+            font-weight: bold;
+            color: #003594;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn {
+            background: #003594;
+            color: white;
+            flex: 1;
+            min-width: 150px;
+        }
+        
+        .submit-btn:hover {
+            background: #041e42;
+        }
+        
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .secondary-btn {
+            background: #ddd;
+            color: #333;
+        }
+        
+        .secondary-btn:hover {
+            background: #bbb;
+        }
+        
+        .grid-display {
+            border: 2px solid #333;
+            padding: 20px;
+            background: white;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+        }
+        
+        .grid-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+        }
+        
+        table th, table td {
+            border: 1px solid #333;
+            padding: 4px 2px;
+            text-align: center;
+            height: 25px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        table th {
+            background: #1a472a;
+            color: white;
+            font-weight: bold;
+        }
+        
+        table td {
+            background: #f5f5f5;
+        }
+        
+        table td.filled {
+            background: #e8f5e9;
+            font-size: 9px;
+            color: #1a472a;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            border-left: 4px solid #003594;
+        }
+        
+        .stat-box .label {
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        
+        .stat-box .value {
+            color: #003594;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .entries-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        
+        .entry-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+        }
+        
+        .entry-item:last-child {
+            border-bottom: none;
+        }
+        
+        .entry-name {
+            font-weight: bold;
+            color: #1a472a;
+        }
+        
+        .entry-squares {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .entry-status {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+        
+        .entry-status.paid {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .entry-status.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .payout-section {
+            background: #d4edda;
+            padding: 20px;
+            border-radius: 5px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .payout-section h3 {
+            color: #155724;
+            margin-bottom: 10px;
+        }
+        
+        .payout-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .payout-item {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .payout-item .quarter {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .payout-item .amount {
+            color: #28a745;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .tabs, .button-group, .tab-button {
+                display: none;
+            }
+            .tab-content {
+                box-shadow: none;
+                break-inside: avoid;
+            }
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #1976d2;
+            margin-bottom: 20px;
+        }
+        
+        .info-box p {
+            color: #0d47a1;
+            font-size: 13px;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏀 THANKSGIVING FOOTBALL POOL 🏈</h1>
+            <p><strong>Dallas Cowboys vs Kansas City Chiefs</strong></p>
+            <p>Thursday, November 27, 2025 at 4:30 p.m. ET</p>
+            <p>Fundraiser for <strong>Parsippany Hills Boys Basketball Team</strong></p>
+            <div class="highlight">
+                💰 $20 Per Square | 100 Squares | $2,000 Total
+            </div>
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('signup')">📝 Sign Up</button>
+            <button class="tab-button" onclick="switchTab('grid')">📊 View Grid</button>
+            <button class="tab-button" onclick="switchTab('entries')">📋 Manage Entries</button>
+        </div>
+        
+        <!-- SIGNUP TAB -->
+        <div id="signup" class="tab-content active">
+            <div class="info-box">
+                <p><strong>How it works:</strong> Enter your information, select your square(s), and submit. You can purchase up to 5 squares per entry.</p>
+                <p style="margin-top: 10px; border-top: 1px solid #0d47a1; padding-top: 10px;"><strong>💰 Payment Instructions:</strong></p>
+                <p style="font-size: 14px; margin-top: 5px;">Send payment via <strong>Venmo</strong> to: <strong style="color: #0d47a1;">@PHHS-BB-Boosters</strong></p>
+                <p style="font-size: 13px; color: #555;">Please include your name and square numbers in the payment memo</p>
+            </div>
+            
+            <div style="background: linear-gradient(135deg, #e3f2fd 0%, #c5d9f1 100%); border-left: 4px solid #003594; padding: 20px; border-radius: 5px; margin-bottom: 25px;">
+                <p style="color: #003594; font-weight: bold; font-size: 16px; margin-bottom: 12px;">🏆 PRIZE PAYOUTS</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px;">
+                    <div style="background: white; padding: 12px; border-radius: 4px; text-align: center; border: 2px solid #003594;">
+                        <p style="color: #666; font-size: 12px; margin-bottom: 5px;">End of Q1</p>
+                        <p style="color: #003594; font-size: 20px; font-weight: bold;">$250</p>
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 4px; text-align: center; border: 2px solid #003594;">
+                        <p style="color: #666; font-size: 12px; margin-bottom: 5px;">End of Q2</p>
+                        <p style="color: #003594; font-size: 20px; font-weight: bold;">$250</p>
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 4px; text-align: center; border: 2px solid #003594;">
+                        <p style="color: #666; font-size: 12px; margin-bottom: 5px;">End of Q3</p>
+                        <p style="color: #003594; font-size: 20px; font-weight: bold;">$250</p>
+                    </div>
+                    <div style="background: white; padding: 12px; border-radius: 4px; text-align: center; border: 2px solid #003594;">
+                        <p style="color: #666; font-size: 12px; margin-bottom: 5px;">Final Score</p>
+                        <p style="color: #003594; font-size: 20px; font-weight: bold;">$250</p>
+                    </div>
+                </div>
+                <p style="color: #003594; font-size: 13px; margin-top: 12px; text-align: center;"><strong>Total Payouts: $1,000</strong></p>
+            </div>
+            
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone">
+                </div>
+                
+                <div class="form-group">
+                    <label>Select Your Square(s) - Click squares to choose (Max 5 per entry)</label>
+                    <div class="square-grid" id="squareGrid"></div>
+                </div>
+                
+                <div class="selected-info">
+                    <p>Squares Selected: <span id="squareCount">0</span></p>
+                    <p id="squaresList"></p>
+                </div>
+                
+                <div class="price-box">
+                    <p>Price per Square: <strong>$20</strong></p>
+                    <p>Number of Squares: <strong><span id="numSquares">0</span></strong></p>
+                    <p class="total">Total Due: $<span id="totalAmount">0</span></p>
+                </div>
+                
+                <div style="background: #e3f2fd; border-left: 4px solid #003594; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+                    <p style="color: #003594; font-weight: bold; margin-bottom: 8px;">💳 Payment Method:</p>
+                    <p style="color: #003594; margin: 5px 0;"><strong>Venmo: @PHHS-BB-Boosters</strong></p>
+                    <p style="color: #003594; font-size: 13px; margin: 5px 0;">Memo: Your name + Square numbers</p>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="submit-btn" id="submitBtn" disabled>Submit Entry</button>
+                    <button type="button" class="secondary-btn" onclick="clearForm()">Clear Form</button>
+                </div>
+                
+                <div style="background: #e3f2fd; border-left: 4px solid #1976d2; padding: 15px; border-radius: 5px; margin-top: 20px;">
+                    <p style="color: #0d47a1; font-weight: bold; margin-bottom: 10px;">📋 HOW TO PLAY:</p>
+                    <p style="color: #333; font-size: 13px; margin: 5px 0;">1. Select your square(s) on the grid</p>
+                    <p style="color: #333; font-size: 13px; margin: 5px 0;">2. At the end of each quarter, the last digit of each team's score determines winners</p>
+                    <p style="color: #333; font-size: 13px; margin: 5px 0;">3. Find the Cowboys score last digit on the left (rows) and Chiefs score last digit on top (columns) - where they intersect is the winning square</p>
+                    <p style="color: #333; font-size: 13px; margin: 5px 0;">4. Winners will be paid at the conclusion of the game</p>
+                    <p style="color: #0d47a1; font-weight: bold; margin-top: 10px; border-top: 1px solid #1976d2; padding-top: 10px;">Total Prize Pool: $1,000 | Team Fundraising Goal: $1,000</p>
+                </div>
+            </form>
+        </div>
+        
+        <!-- GRID TAB -->
+        <div id="grid" class="tab-content">
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="label">Squares Sold</div>
+                    <div class="value"><span id="soldCount">0</span>/100</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Total Revenue</div>
+                    <div class="value">$<span id="totalRevenue">0</span></div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Team Profit</div>
+                    <div class="value">$<span id="teamProfit">1000</span></div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Payouts</div>
+                    <div class="value">$1,000</div>
+                </div>
+            </div>
+            
+            <div class="payout-section">
+                <h3>Payout Structure</h3>
+                <div class="payout-grid">
+                    <div class="payout-item">
+                        <div class="quarter">End of Q1</div>
+                        <div class="amount">$250</div>
+                    </div>
+                    <div class="payout-item">
+                        <div class="quarter">End of Q2</div>
+                        <div class="amount">$250</div>
+                    </div>
+                    <div class="payout-item">
+                        <div class="quarter">End of Q3</div>
+                        <div class="amount">$250</div>
+                    </div>
+                    <div class="payout-item">
+                        <div class="quarter">Final Score</div>
+                        <div class="amount">$250</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <h3 style="margin-bottom: 15px;">Cowboys vs Chiefs - 10x10 Grid</h3>
+                <div class="grid-display">
+                    <div class="grid-title">CHIEFS FINAL SCORE DIGIT (Last Digit: 0-9)</div>
+                    <table id="gridTable"></table>
+                </div>
+                <button class="submit-btn" onclick="window.print()" style="margin-top: 10px; width: auto;">🖨️ Print Grid</button>
+            </div>
+        </div>
+        
+        <!-- ENTRIES TAB -->
+        <div id="entries" class="tab-content">
+            <div class="summary-stats">
+                <div class="stat-box">
+                    <div class="label">Total Entries</div>
+                    <div class="value" id="totalEntries">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Paid Entries</div>
+                    <div class="value" id="paidEntries">0</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Pending Payment</div>
+                    <div class="value" id="pendingEntries">0</div>
+                </div>
+            </div>
+            
+            <h3 style="margin-bottom: 10px;">All Entries</h3>
+            <div class="entries-list" id="entriesList">
+                <p style="color: #999; text-align: center; padding: 20px;">No entries yet</p>
+            </div>
+            
+            <div class="button-group" style="margin-top: 20px;">
+                <button class="secondary-btn" onclick="exportToCSV()">📥 Export to CSV</button>
+                <button class="secondary-btn" onclick="clearAllData()">🗑️ Clear All Data</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const TOTAL_SQUARES = 100;
+        const PRICE_PER_SQUARE = 20;
+        const MAX_SQUARES_PER_ENTRY = 5;
+        
+        let entries = JSON.parse(localStorage.getItem('poolEntries')) || [];
+        let selectedSquares = [];
+        
+        function initializeSquareGrid() {
+            const gridDiv = document.getElementById('squareGrid');
+            gridDiv.innerHTML = '';
+            
+            for (let i = 1; i <= TOTAL_SQUARES; i++) {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = i;
+                btn.className = 'square-btn';
+                btn.dataset.square = i;
+                
+                // Check if square is sold
+                const isSold = entries.some(entry => entry.squares.includes(i));
+                if (isSold) {
+                    btn.classList.add('sold');
+                    btn.disabled = true;
+                }
+                
+                btn.addEventListener('click', (e) => toggleSquare(e, i));
+                gridDiv.appendChild(btn);
+            }
+        }
+        
+        function toggleSquare(e, square) {
+            e.preventDefault();
+            
+            const btn = e.target;
+            if (btn.classList.contains('sold')) return;
+            
+            if (selectedSquares.includes(square)) {
+                selectedSquares = selectedSquares.filter(s => s !== square);
+                btn.classList.remove('selected');
+            } else {
+                if (selectedSquares.length < MAX_SQUARES_PER_ENTRY) {
+                    selectedSquares.push(square);
+                    selectedSquares.sort((a, b) => a - b);
+                    btn.classList.add('selected');
+                } else {
+                    alert(`You can only select up to ${MAX_SQUARES_PER_ENTRY} squares per entry.`);
+                }
+            }
+            
+            updatePriceDisplay();
+        }
+        
+        function updatePriceDisplay() {
+            const count = selectedSquares.length;
+            document.getElementById('squareCount').textContent = count;
+            document.getElementById('numSquares').textContent = count;
+            document.getElementById('totalAmount').textContent = count * PRICE_PER_SQUARE;
+            
+            const listDiv = document.getElementById('squaresList');
+            if (count > 0) {
+                listDiv.textContent = 'Squares: ' + selectedSquares.join(', ');
+            } else {
+                listDiv.textContent = '';
+            }
+            
+            document.getElementById('submitBtn').disabled = count === 0;
+        }
+        
+        function clearForm() {
+            document.getElementById('signupForm').reset();
+            selectedSquares = [];
+            initializeSquareGrid();
+            updatePriceDisplay();
+        }
+        
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            if (!name || !email) {
+                alert('Please fill in name and email');
+                return;
+            }
+            
+            const entry = {
+                id: Date.now(),
+                name: name,
+                email: email,
+                phone: phone,
+                squares: [...selectedSquares],
+                amount: selectedSquares.length * PRICE_PER_SQUARE,
+                paymentStatus: 'pending',
+                date: new Date().toLocaleDateString()
+            };
+            
+            entries.push(entry);
+            localStorage.setItem('poolEntries', JSON.stringify(entries));
+            
+            alert(`✅ Entry submitted!\n\nName: ${name}\nSquares: ${selectedSquares.join(', ')}\nTotal Due: $${entry.amount}\n\n💳 PAYMENT:\nSend via Venmo: @PHHS-BB-Boosters\nMemo: ${name} - Squares ${selectedSquares.join(', ')}\n\n🏆 PRIZE PAYOUTS:\nEnd of Q1: $250\nEnd of Q2: $250\nEnd of Q3: $250\nFinal Score: $250\n\nThank you for supporting Par Hills Basketball!`);
+            
+            clearForm();
+            updateAllDisplays();
+        });
+        
+        function updateAllDisplays() {
+            initializeSquareGrid();
+            updateGridDisplay();
+            updateEntriesDisplay();
+            updateStats();
+        }
+        
+        function updateGridDisplay() {
+            const table = document.getElementById('gridTable');
+            table.innerHTML = '';
+            
+            // Header row
+            const headerRow = table.insertRow();
+            headerRow.insertCell(0).textContent = 'COWBOYS→ | CHIEFS↓';
+            for (let i = 0; i <= 9; i++) {
+                const cell = headerRow.insertCell(i + 1);
+                cell.textContent = i;
+            }
+            
+            // Data rows
+            for (let row = 0; row <= 9; row++) {
+                const tr = table.insertRow();
+                const headerCell = tr.insertCell(0);
+                headerCell.textContent = row;
+                headerCell.style.fontWeight = 'bold';
+                
+                for (let col = 0; col <= 9; col++) {
+                    const squareNum = (row * 10) + col + 1;
+                    const cell = tr.insertCell(col + 1);
+                    
+                    // Find owner of this square
+                    const owner = entries.find(entry => entry.squares.includes(squareNum));
+                    if (owner) {
+                        cell.textContent = owner.name.split(' ')[0]; // First name only
+                        cell.classList.add('filled');
+                        cell.title = owner.name; // Full name on hover
+                    } else {
+                        cell.textContent = squareNum;
+                    }
+                }
+            }
+        }
+        
+        function updateEntriesDisplay() {
+            const listDiv = document.getElementById('entriesList');
+            
+            if (entries.length === 0) {
+                listDiv.innerHTML = '<p style="color: #999; text-align: center; padding: 20px;">No entries yet</p>';
+                return;
+            }
+            
+            listDiv.innerHTML = '';
+            entries.forEach((entry, index) => {
+                const div = document.createElement('div');
+                div.className = 'entry-item';
+                
+                const statusClass = entry.paymentStatus === 'paid' ? 'paid' : 'pending';
+                const statusText = entry.paymentStatus === 'paid' ? '✓ Paid' : '⏳ Pending';
+                
+                div.innerHTML = `
+                    <div class="entry-name">${index + 1}. ${entry.name} 
+                        <span class="entry-status ${statusClass}" style="cursor: pointer;" onclick="togglePaymentStatus(${entry.id})">${statusText}</span>
+                    </div>
+                    <div class="entry-squares">Squares: ${entry.squares.join(', ')} | Amount: $${entry.amount}</div>
+                    <div style="font-size: 11px; color: #999;">Email: ${entry.email} | Phone: ${entry.phone || 'N/A'} | Date: ${entry.date}</div>
+                    <p style="font-size: 12px; color: #666; margin-top: 8px;"><em>Click payment status to toggle between Paid/Pending</em></p>
+                `;
+                
+                listDiv.appendChild(div);
+            });
+        }
+        
+        function togglePaymentStatus(entryId) {
+            const entryIndex = entries.findIndex(e => e.id === entryId);
+            if (entryIndex !== -1) {
+                entries[entryIndex].paymentStatus = entries[entryIndex].paymentStatus === 'paid' ? 'pending' : 'paid';
+                localStorage.setItem('poolEntries', JSON.stringify(entries));
+                updateEntriesDisplay();
+                updateStats();
+            }
+        }
+        
+        function updateStats() {
+            const allSquares = entries.flatMap(e => e.squares);
+            const uniqueSquares = new Set(allSquares).size;
+            const totalRevenue = entries.reduce((sum, e) => sum + e.amount, 0);
+            const teamProfit = totalRevenue - 1000; // 1000 in payouts
+            const paidCount = entries.filter(e => e.paymentStatus === 'paid').length;
+            
+            document.getElementById('soldCount').textContent = uniqueSquares;
+            document.getElementById('totalRevenue').textContent = totalRevenue;
+            document.getElementById('teamProfit').textContent = Math.max(1000, teamProfit);
+            document.getElementById('totalEntries').textContent = entries.length;
+            document.getElementById('paidEntries').textContent = paidCount;
+            document.getElementById('pendingEntries').textContent = entries.length - paidCount;
+        }
+        
+        function switchTab(tabName) {
+            // Password protect the entries tab
+            if (tabName === 'entries') {
+                const password = prompt('Enter password to access Manage Entries:');
+                if (password !== 'ParHills2025') {
+                    alert('Incorrect password. Access denied.');
+                    return;
+                }
+            }
+            
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (tabName === 'grid') {
+                updateGridDisplay();
+            } else if (tabName === 'entries') {
+                updateEntriesDisplay();
+            }
+        }
+        
+        function exportToCSV() {
+            let csv = 'Name,Email,Phone,Squares,Amount,Payment Status,Date\n';
+            
+            entries.forEach(entry => {
+                csv += `"${entry.name}","${entry.email}","${entry.phone}","${entry.squares.join(', ')}",${entry.amount},${entry.paymentStatus},${entry.date}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Thanksgiving_Pool_Entries.csv';
+            a.click();
+        }
+        
+        function clearAllData() {
+            if (confirm('Are you sure? This will delete all entries. This cannot be undone.')) {
+                entries = [];
+                localStorage.removeItem('poolEntries');
+                selectedSquares = [];
+                updateAllDisplays();
+                alert('All data cleared');
+            }
+        }
+        
+        // Initialize on page load
+        window.addEventListener('load', function() {
+            initializeSquareGrid();
+            updateEntriesDisplay();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
